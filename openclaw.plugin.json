@@ -1,0 +1,32 @@
+{
+  "id": "youtube-plugin-oc",
+  "name": "YouTube Plugin for OpenClaw",
+  "description": "YouTube integration for OpenClaw – search channels, fetch transcripts, trending videos, and topic-based search",
+  "version": "1.0.0",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "apiKey": {
+        "type": "string",
+        "description": "YouTube Data API v3 key"
+      },
+      "transcriptCacheDir": {
+        "type": "string",
+        "description": "Directory where transcript JSON files are cached (default: ./transcripts)"
+      }
+    },
+    "required": ["apiKey"]
+  },
+  "uiHints": {
+    "apiKey": {
+      "label": "YouTube API Key",
+      "placeholder": "AIzaSy...",
+      "sensitive": true
+    },
+    "transcriptCacheDir": {
+      "label": "Transcript Cache Directory",
+      "placeholder": "./transcripts"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "@jithinm/youtube-plugin-oc",
+  "version": "1.0.0",
+  "description": "YouTube plugin for OpenClaw – search channels, get transcripts, trending videos, and topic-based search",
+  "main": "index.ts",
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "openclaw",
+    "youtube",
+    "plugin"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "dotenv": "^17.2.4",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
