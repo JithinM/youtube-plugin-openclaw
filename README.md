@@ -74,7 +74,7 @@ Fetch the transcript (captions/subtitles) for a video. Does **not** require a Yo
 - `videoId` (string, required) – Video ID (e.g. `dQw4w9WgXcQ`) or full URL
 - `language` (string, optional, default `"en"`) – ISO language code
 
-**Returns:** Object with `fullText` (concatenated transcript), `segmentCount`, and `segments` array (each with `text`, `offset`, `duration`).
+**Returns:** Object with `videoId`, `language`, and `fullText` (concatenated transcript).
 
 ### youtube_trending_videos
 

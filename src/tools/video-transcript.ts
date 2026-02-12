@@ -1,5 +1,5 @@
 import { Type } from "@sinclair/typebox";
-import { fetchTranscript } from "../transcript-client.js";
+import { fetchTranscriptText } from "../transcript-client.js";
 
 /**
  * Register the `youtube_video_transcript` agent tool.
@@ -12,7 +12,7 @@ export function registerVideoTranscriptTool(api: any) {
     name: "youtube_video_transcript",
     description:
       "Get the transcript (captions) for a YouTube video. " +
-      "Returns timestamped text segments. Does not require a YouTube API key.",
+      "Returns the full transcript text. Does not require a YouTube API key.",
     parameters: Type.Object({
       videoId: Type.String({
         description:
@@ -33,27 +33,23 @@ export function registerVideoTranscriptTool(api: any) {
       const lang = params.language ?? "en";
 
       try {
-        const segments = await fetchTranscript(params.videoId, lang);
+        const fullText = await fetchTranscriptText(params.videoId, lang);
 
-        if (segments.length === 0) {
+        if (!fullText.trim()) {
           return {
             content: [
               {
                 type: "text" as const,
-                text: `No transcript segments found for video "${params.videoId}" in language "${lang}".`,
+                text: `No transcript found for video "${params.videoId}" in language "${lang}".`,
               },
             ],
           };
         }
 
-        // Return both the full text and the timestamped segments
-        const fullText = segments.map((s) => s.text).join(" ");
         const result = {
           videoId: params.videoId,
           language: lang,
           fullText,
-          segmentCount: segments.length,
-          segments,
         };
 
         return {
