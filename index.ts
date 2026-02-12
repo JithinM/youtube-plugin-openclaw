@@ -14,16 +14,16 @@ import { registerSearchVideosTool } from "./src/tools/search-videos.js";
  *   - youtube_trending_videos  – get trending videos for a region
  *   - youtube_search_videos    – search videos by topic
  *
- * Config (plugins.entries.youtube.config):
+ * Config (plugins.entries.youtube-plugin-oc.config):
  *   - apiKey:              YouTube Data API v3 key (required for all tools except transcript)
  *   - transcriptCacheDir:  Directory for cached transcript files (default: "./transcripts")
  */
 export default function register(api: any) {
   const getConfig = (): YouTubePluginConfig => {
     // api.config holds the full OpenClaw config;
-    // plugin config lives under plugins.entries.youtube.config
+    // plugin config lives under plugins.entries.youtube-plugin-oc.config
     const pluginConfig =
-      api.config?.plugins?.entries?.youtube?.config ??
+      api.config?.plugins?.entries?.["youtube-plugin-oc"]?.config ??
       ({} as Partial<YouTubePluginConfig>);
 
     return {

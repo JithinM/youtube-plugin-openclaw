@@ -35,13 +35,13 @@ Restart the Gateway after installing.
 
 ## Configuration
 
-Add your YouTube API key under `plugins.entries.youtube.config` in your OpenClaw config:
+Add your YouTube API key under `plugins.entries.youtube-plugin-oc.config` in your OpenClaw config:
 
 ```json5
 {
   plugins: {
     entries: {
-      youtube: {
+      youtube-plugin-oc: {
         enabled: true,
         config: {
           apiKey: "YOUR_YOUTUBE_DATA_API_V3_KEY"

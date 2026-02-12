@@ -42,7 +42,7 @@ export function registerChannelVideosTool(
           content: [
             {
               type: "text" as const,
-              text: "Error: YouTube API key is not configured. Set it under plugins.entries.youtube.config.apiKey",
+              text: "Error: YouTube API key is not configured. Set it under plugins.entries.youtube-plugin-oc.config.apiKey",
             },
           ],
         };
