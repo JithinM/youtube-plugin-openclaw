@@ -85,46 +85,8 @@ function videoItemToVideoResult(item: YTVideoItem): VideoResult {
 }
 
 // ── Public API ──────────────────────────────────────────────────────────────
-
-/**
- * Resolve a channel name / handle to its channel ID by searching.
- * Returns the first matching channel ID, or null if not found.
- */
-export async function resolveChannelId(
-  query: string,
-  apiKey: string,
-): Promise<string | null> {
-  const url = buildUrl("search", {
-    part: "snippet",
-    type: "channel",
-    q: query,
-    maxResults: 1,
-    key: apiKey,
-  });
-  const data = await ytFetch<YTListResponse<YTSearchItem>>(url);
-  const first = data.items[0];
-  return first?.id.channelId ?? null;
-}
-
-/**
- * Get the most recent videos from a channel.
- */
-export async function getChannelVideos(
-  channelId: string,
-  maxResults: number,
-  apiKey: string,
-): Promise<VideoResult[]> {
-  const url = buildUrl("search", {
-    part: "snippet",
-    type: "video",
-    channelId,
-    order: "date",
-    maxResults,
-    key: apiKey,
-  });
-  const data = await ytFetch<YTListResponse<YTSearchItem>>(url);
-  return data.items.map(searchItemToVideoResult).slice(0, maxResults);
-}
+// Only search and trending use the YouTube Data API (requires API key).
+// Channel video listing has moved to innertube-client.ts (no API key needed).
 
 /**
  * Get trending (most popular) videos for a region.

@@ -9,14 +9,14 @@
     "properties": {
       "apiKey": {
         "type": "string",
-        "description": "YouTube Data API v3 key"
+        "description": "YouTube Data API v3 key (only needed for search & trending tools)"
       },
       "transcriptCacheDir": {
         "type": "string",
         "description": "Directory where transcript JSON files are cached (default: ./transcripts)"
       }
     },
-    "required": ["apiKey"]
+    "required": []
   },
   "uiHints": {
     "apiKey": {

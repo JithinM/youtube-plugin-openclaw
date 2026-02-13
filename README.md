@@ -4,7 +4,7 @@ A plugin that adds YouTube integration to [OpenClaw](https://docs.openclaw.ai/) 
 
 | Tool | Description | Requires API Key |
 |------|-------------|:---:|
-| `youtube_channel_videos` | Get top N recent videos from a channel | Yes |
+| `youtube_channel_videos` | Get top N recent videos from a channel (max 15) | No |
 | `youtube_video_transcript` | Get transcript (captions) for a video | No |
 | `youtube_trending_videos` | Get trending videos for a region | Yes |
 | `youtube_search_videos` | Search videos by topic / keyword | Yes |
@@ -13,8 +13,8 @@ A plugin that adds YouTube integration to [OpenClaw](https://docs.openclaw.ai/) 
 
 - [OpenClaw](https://docs.openclaw.ai/install) installed and running
 - A **YouTube Data API v3** key ([get one here](https://console.cloud.google.com/apis/credentials))
-  - Only needed for channel videos, trending, and search tools
-  - The transcript tool works without any API key
+  - Only needed for **trending** and **search** tools
+  - Channel videos and transcript tools work **without any API key**
 
 ## Install
 
@@ -58,11 +58,11 @@ Restart the Gateway after changing config.
 
 ### youtube_channel_videos
 
-Get the most recent videos from a YouTube channel.
+Get the most recent videos from a YouTube channel. Uses InnerTube to resolve the channel and YouTube's public RSS feed to list videos. **Does not require a YouTube API key.**
 
 **Parameters:**
-- `channelName` (string, required) – Channel name, handle (e.g. `@mkbhd`), or channel ID
-- `maxResults` (number, optional, default 5) – Number of videos to return (1–50)
+- `channelName` (string, required) – Channel name, handle (e.g. `@mkbhd`), URL, or channel ID
+- `maxResults` (number, optional, default 5) – Number of videos to return (1–15)
 
 **Returns:** Array of video objects with `videoId`, `title`, `description`, `channelTitle`, `publishedAt`, `thumbnailUrl`.
 
@@ -101,9 +101,10 @@ Search YouTube by topic or keyword.
 ## YouTube API Quota
 
 The YouTube Data API v3 has a daily quota (default 10,000 units). Costs per call:
-- `search.list` (channel videos, search) – **100 units**
-- `videos.list` (trending) – **1 unit**
-- Transcript fetching – **0 units** (does not use the YouTube Data API)
+- `search.list` (search tool) – **100 units**
+- `videos.list` (trending tool) – **1 unit**
+- Channel videos – **0 units** (uses InnerTube + RSS feed, no API key)
+- Transcript fetching – **0 units** (uses InnerTube, no API key)
 
 Plan your usage accordingly. See [YouTube API Quota](https://developers.google.com/youtube/v3/determine_quota_cost) for details.
 

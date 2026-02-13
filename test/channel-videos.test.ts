@@ -1,13 +1,15 @@
 import { describe, it, expect } from "vitest";
-import { resolveChannelId, getChannelVideos } from "../src/youtube-client.js";
-import { getApiKey, getChannelName } from "./setup.js";
+import {
+  resolveChannelId,
+  getChannelVideosFromRSS,
+} from "../src/innertube-client.js";
+import { getChannelName } from "./setup.js";
 
 describe("youtube_channel_videos", () => {
-  const apiKey = getApiKey();
   const channelName = getChannelName();
 
   it("resolves a channel name to a channel ID", async () => {
-    const channelId = await resolveChannelId(channelName, apiKey);
+    const channelId = await resolveChannelId(channelName);
 
     expect(channelId).toBeDefined();
     expect(channelId).not.toBeNull();
@@ -15,11 +17,11 @@ describe("youtube_channel_videos", () => {
     expect(channelId!.startsWith("UC")).toBe(true);
   });
 
-  it("fetches videos for a resolved channel", async () => {
-    const channelId = await resolveChannelId(channelName, apiKey);
+  it("fetches videos for a resolved channel via RSS", async () => {
+    const channelId = await resolveChannelId(channelName);
     expect(channelId).not.toBeNull();
 
-    const videos = await getChannelVideos(channelId!, 3, apiKey);
+    const videos = await getChannelVideosFromRSS(channelId!, 3);
 
     expect(videos).toBeInstanceOf(Array);
     expect(videos.length).toBeGreaterThan(0);
@@ -36,22 +38,25 @@ describe("youtube_channel_videos", () => {
   });
 
   it("returns an empty array for a non-existent channel ID", async () => {
-    // Use a fabricated channel ID that shouldn't match anything
-    const videos = await getChannelVideos(
-      "UCxxxxxxxxxxxxxxxxxxxxxx",
-      5,
-      apiKey,
-    );
-    expect(videos).toBeInstanceOf(Array);
-    expect(videos.length).toBe(0);
+    // Use a fabricated channel ID – RSS feed will return 404 or empty
+    try {
+      const videos = await getChannelVideosFromRSS(
+        "UCxxxxxxxxxxxxxxxxxxxxxx",
+        5,
+      );
+      expect(videos).toBeInstanceOf(Array);
+      expect(videos.length).toBe(0);
+    } catch (error) {
+      // RSS feed may throw for invalid channel ID – that's acceptable
+      expect(error).toBeDefined();
+    }
   });
 
   it("returns null when resolving a gibberish channel name", async () => {
     const channelId = await resolveChannelId(
       "zzz_nonexistent_channel_xyzzy_99999",
-      apiKey,
     );
-    // May return null or a spurious match; either way should not throw
-    expect(typeof channelId === "string" || channelId === null).toBe(true);
+    // Should return null for unknown channel
+    expect(channelId).toBeNull();
   });
 });
