@@ -1,12 +1,13 @@
 {
   "name": "@vyamika/youtube-plugin-oc",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "YouTube plugin for OpenClaw – search channels, get transcripts, trending videos, and topic-based search",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "openclaw.plugin.json"
   ],
   "openclaw": {
     "extensions": [
@@ -16,7 +17,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node scripts/copy-plugin-json.cjs",
     "prepublishOnly": "npm version patch --no-git-tag-version && node scripts/sync-plugin-version.cjs && npm run build",
-    "test": "vitest run",
+    "test": "node scripts/test-with-report.cjs",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [

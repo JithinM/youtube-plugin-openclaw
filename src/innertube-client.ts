@@ -41,27 +41,32 @@ export async function resolveChannelId(
   const yt = await getInnertube();
 
   try {
-    // If input looks like a URL, resolve it first
-    if (input.startsWith("http://") || input.startsWith("https://")) {
-      const endpoint = await yt.resolveURL(input);
-      const browseId: string | undefined =
-        endpoint.payload?.browseId ?? endpoint.payload?.browseEndpoint?.browseId;
-      if (browseId && RE_CHANNEL_ID.test(browseId)) {
-        return browseId;
-      }
+    // Resolve via URL first – works for handles (@name), URLs, and channel names
+    const urlToResolve =
+      input.startsWith("http://") || input.startsWith("https://")
+        ? input
+        : input.startsWith("@")
+          ? `https://www.youtube.com/${input}`
+          : `https://www.youtube.com/@${input}`;
+
+    const endpoint = await yt.resolveURL(urlToResolve);
+    const browseId: string | undefined =
+      (endpoint as any)?.payload?.browseId ??
+      (endpoint as any)?.payload?.browseEndpoint?.browseId;
+    if (browseId && RE_CHANNEL_ID.test(browseId)) {
+      return browseId;
     }
 
-    // Handles like @mkbhd or plain names – use getChannel which
-    // accepts both channel IDs and handles via the browse endpoint.
+    // Fallback: getChannel and extract from metadata
     const channel = await yt.getChannel(input);
+    const meta = channel?.metadata as Record<string, unknown> | undefined;
 
-    // Extract channel ID from metadata
-    const channelId =
-      (channel.metadata as Record<string, any>)?.external_id ??
-      (channel.metadata as Record<string, any>)?.url?.match(RE_CHANNEL_ID)?.[0] ??
-      null;
-
-    return channelId;
+    return (
+      (typeof meta?.external_id === "string" && meta.external_id) ||
+      (typeof meta?.externalId === "string" && meta.externalId) ||
+      (typeof meta?.url === "string" && meta.url.match(RE_CHANNEL_ID)?.[0]) ||
+      null
+    );
   } catch {
     return null;
   }
