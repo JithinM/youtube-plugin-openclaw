@@ -5,25 +5,17 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "openclaw": {
-    "extensions": [
-      "./dist/index.js"
-    ]
+    "extensions": ["./dist/index.js"]
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "prepublishOnly": "npm run build",
+    "build": "tsc -p tsconfig.build.json && node scripts/copy-plugin-json.cjs",
+    "prepublishOnly": "npm version patch --no-git-tag-version && node scripts/sync-plugin-version.cjs && npm run build",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": [
-    "openclaw",
-    "youtube",
-    "plugin"
-  ],
+  "keywords": ["openclaw", "youtube", "plugin"],
   "license": "MIT",
   "dependencies": {
     "@sinclair/typebox": "^0.34.0",
